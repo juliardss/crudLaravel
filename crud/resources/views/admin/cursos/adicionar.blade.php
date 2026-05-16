@@ -1,25 +1,16 @@
 @extends('layout.site')
 
-@section('titulo', 'Cursos')
+@section('titulo', 'Adicionar Curso')
 
 @section('conteudo')
-
 <div class="container">
-    <h3 class="center">Adicionar Curso</h3>
-
+    <h3 class="center">Adicionar Novo Curso</h3>
+    
     <div class="row">
-        <form class="" action="{{ route('admin.cursos.salvar') }}"
-              method="post"
-              enctype="multipart/form-data">
-
-            {{ csrf_field() }}
-
-            @include('admin.cursos._form')
-
-            <button class="btn pink lighten-3">Salvar</button>
-
+        <form action="{{ route('admin.cursos.salvar') }}" method="POST" enctype="multipart/form-data">
+            
+            {{ csrf_field() }} @include('admin.cursos._form') <button class="btn blue">Salvar Curso</button>
         </form>
     </div>
 </div>
-
 @endsection
