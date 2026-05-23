@@ -10,7 +10,6 @@ use App\Models\Curso;
 
 class AlunoController extends Controller
 {
-    // LISTAR
     public function index()
     {
         $rows = Aluno::all();
@@ -18,50 +17,61 @@ class AlunoController extends Controller
         return view('admin.alunos.index', compact('rows'));
     }
 
-    // ABRIR FORM ADICIONAR
     public function adicionar()
     {
         $cursos = Curso::all();
 
-        return view(
-            'admin.alunos.adicionar',
-            compact('cursos')
-        );
+        return view('admin.alunos.adicionar', compact('cursos'));
     }
 
-    // SALVAR
     public function salvar(Request $request)
     {
         $dados = $request->all();
+
+        if ($request->hasFile('arquivo')) {
+            $arquivo = $request->file('arquivo');
+            $nome = time() . '.' . $arquivo->extension();
+            $arquivo->move(public_path('img'), $nome);
+            $dados['imagem'] = 'img/' . $nome;
+        }
 
         Aluno::create($dados);
 
         return redirect()->route('admin.alunos');
     }
 
-    // ABRIR FORM EDITAR
     public function editar($id)
     {
-        $row = Aluno::find($id);
+        $linha = Aluno::find($id);
 
         $cursos = Curso::all();
 
         return view(
             'admin.alunos.editar',
-            compact('row', 'cursos')
+            compact('linha', 'cursos')
         );
     }
-    // ATUALIZAR
+
     public function atualizar(Request $request, $id)
     {
         $dados = $request->all();
+
+        if ($request->hasFile('arquivo')) {
+
+            $arquivo = $request->file('arquivo');
+
+            $nome = time() . '.' . $arquivo->extension();
+
+            $arquivo->move(public_path('img'), $nome);
+
+            $dados['imagem'] = 'img/' . $nome;
+        }
 
         Aluno::find($id)->update($dados);
 
         return redirect()->route('admin.alunos');
     }
 
-    // EXCLUIR
     public function excluir($id)
     {
         Aluno::find($id)->delete();
